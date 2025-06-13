@@ -195,6 +195,7 @@
                         <div class="project">
                 <h3>UBER CLONE</h3>
                 <p>Built with React.js and Backend(Expressjs + Nodejs + Mongodb) also have <br>GOOGLEMAP JS API KEY<br/> for location detection and finding routes and paths .</p>
+                <p><br>NOTE:</br>BUT HERE REQUIRES TWO USER ONE IS CAPTAIN(DRIVER) AND ANOTHER IS USER </p>
                 <div class="project-buttons">
                     <a href="https://fantastic-nasturtium-85be57.netlify.app/" target="_blank" class="btn-live">Live</a>
                     <a href="https://github.com/mayankcharde/uber-final" target="_blank" class="btn-code">Code</a>
@@ -234,15 +235,28 @@
         <p class="contact-subtitle">
             Have a project in mind or want to say hello? Fill the form below!
         </p>
-        <form>
+        <div class="contact-info">
+            <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <p>+91 9699561658</p>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <p>mayankcharde2@gmail.com</p>
+            </div>
+        </div>
+        <form id="contactForm" onsubmit="handleSubmit(event)">
             <div class="input-group">
-                <input type="text" placeholder="Your Name" required>
+                <input type="text" name="name" placeholder="Your Name" required>
             </div>
             <div class="input-group">
-                <input type="email" placeholder="Your Email" required>
+                <input type="email" name="email" placeholder="Your Email" required>
             </div>
             <div class="input-group">
-                <textarea type="text" placeholder="Your Message" rows="5" required> </textarea>
+                <input type="tel" name="phone" placeholder="Your Phone Number" required>
+            </div>
+            <div class="input-group">
+                <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
             </div>
             <button type="submit">Send Message</button>
         </form>
@@ -449,6 +463,39 @@
         backToTop.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('http://localhost:5000/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: formData.get('name'),
+                        email: formData.get('email'),
+                        phone: formData.get('phone'),
+                        message: formData.get('message')
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Message sent successfully!');
+                    form.reset();
+                } else {
+                    throw new Error(data.error || 'Failed to send message');
+                }
+            } catch (error) {
+                alert(`Error: ${error.message || 'Failed to send message. Please try again.'}`);
+                console.error('Form submission error:', error);
+            }
+        }
     </script>
 </body>
 
