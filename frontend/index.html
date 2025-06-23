@@ -226,6 +226,16 @@
                     <a href="https://github.com/mayankcharde/yt-toxic-comment-detector" target="_blank" class="btn-code">Code</a>
                 </div>
             </div>
+             <div class="project">
+                <h3>Full-Stack Prototype of NADT Learning Platform</h3>
+                <p>Advanced training platform for tax professionals with integrated management systems</p>
+                
+                <div class="project-buttons">
+                    <a href="http://preeminent-bavarois-b1e2d8.netlify.app" target="_blank" class="btn-live">Live</a>
+                
+                    <a href="https://github.com/mayankcharde/nadt4" target="_blank" class="btn-code">Code</a>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -489,14 +499,37 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    // Try to extract error message from backend
+                    let errorMsg = `HTTP error! status: ${response.status}`;
+                    let backendError = null;
+                    try {
+                        const errorData = await response.json();
+                        backendError = errorData;
+                        if (errorData) {
+                            if (errorData.message) errorMsg = errorData.message;
+                            else if (errorData.error) errorMsg = errorData.error;
+                        }
+                    } catch (jsonErr) {
+                        // Ignore JSON parse errors
+                    }
+                    if (response.status === 500) {
+                        alert('Server error (500): Unable to send message. Please try again later or contact me directly via email.');
+                        // Log backend error details for debugging
+                        console.error('Backend 500 error:', backendError);
+                    } else {
+                        alert(`Error: ${errorMsg}`);
+                    }
+                    throw new Error(errorMsg);
                 }
 
                 const data = await response.json();
                 alert('Message sent successfully!');
                 form.reset();
             } catch (error) {
-                alert(`Error: Unable to send message. Please try again later.`);
+                // Only show alert if not already shown above
+                if (!error.message.includes('Server error (500)')) {
+                    alert(`Error: Unable to send message. Please try again later.`);
+                }
                 console.error('Form submission error:', error);
             }
         }

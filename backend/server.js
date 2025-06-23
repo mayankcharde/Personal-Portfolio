@@ -21,9 +21,17 @@ app.post('/api/contact', async (req, res) => {
     try {
         const { name, email, phone, message } = req.body;
         
+        // Log incoming request for debugging
+        console.log('Incoming contact request:', req.body);
+
         // Validate required fields
         if (!name || !email || !phone || !message) {
-            return res.status(400).json({ error: 'All fields are required' });
+            console.error('Validation error: Missing fields', req.body);
+            return res.status(400).json({ 
+                success: false, 
+                error: 'All fields are required',
+                message: 'All fields are required'
+            });
         }
 
         const newContact = new Contact({
@@ -46,6 +54,7 @@ app.post('/api/contact', async (req, res) => {
         res.status(500).json({ 
             success: false, 
             error: 'Error sending message',
+            message: error.message || 'Internal server error',
             details: error.message 
         });
     }
