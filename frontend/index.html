@@ -236,6 +236,18 @@
                     <a href="https://github.com/mayankcharde/nadt4" target="_blank" class="btn-code">Code</a>
                 </div>
             </div>
+            <div class="project">
+                <h3>E-Commerce Website</h3>
+                <h5>E Store</h5>
+
+                <p>Modern web app for seamless shopping, fast delivery, secure payments.</p>
+                
+                <div class="project-buttons">
+                    <a href="hhttps://statuesque-sorbet-5b418e.netlify.app/" target="_blank" class="btn-live">Live</a>
+                
+                    <a href="https://github.com/mayankcharde/E-Commerce" target="_blank" class="btn-code">Code</a>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -473,66 +485,6 @@
         backToTop.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-
-        async function handleSubmit(e) {
-            e.preventDefault();
-            const form = e.target;
-            const formData = new FormData(form);
-
-            // Backend API URL - Use environment-specific URL
-            const API_URL = window.location.hostname === 'localhost' 
-                ? 'http://localhost:5000/api/contact'
-                : 'https://personal-portfolio-k545.onrender.com/api/contact';  // Update this with your actual backend URL
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        name: formData.get('name'),
-                        email: formData.get('email'),
-                        phone: formData.get('phone'),
-                        message: formData.get('message')
-                    })
-                });
-
-                if (!response.ok) {
-                    // Try to extract error message from backend
-                    let errorMsg = `HTTP error! status: ${response.status}`;
-                    let backendError = null;
-                    try {
-                        const errorData = await response.json();
-                        backendError = errorData;
-                        if (errorData) {
-                            if (errorData.message) errorMsg = errorData.message;
-                            else if (errorData.error) errorMsg = errorData.error;
-                        }
-                    } catch (jsonErr) {
-                        // Ignore JSON parse errors
-                    }
-                    if (response.status === 500) {
-                        alert('Server error (500): Unable to send message. Please try again later or contact me directly via email.');
-                        // Log backend error details for debugging
-                        console.error('Backend 500 error:', backendError);
-                    } else {
-                        alert(`Error: ${errorMsg}`);
-                    }
-                    throw new Error(errorMsg);
-                }
-
-                const data = await response.json();
-                alert('Message sent successfully!');
-                form.reset();
-            } catch (error) {
-                // Only show alert if not already shown above
-                if (!error.message.includes('Server error (500)')) {
-                    alert(`Error: Unable to send message. Please try again later.`);
-                }
-                console.error('Form submission error:', error);
-            }
-        }
     </script>
 </body>
 
